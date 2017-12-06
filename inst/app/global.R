@@ -4,6 +4,7 @@ library(quantmod)
 library(dygraphs)
 
 
+
 # Function definitions ###################
 get_stock_matrix <- function(ti_symbols = c("AAPL",
                                             "MSFT",
