@@ -15,7 +15,9 @@ dashboardPage(
               "2015-01-01"),
     dateInput("end_date","Select End Date",
               Sys.Date()),
-    checkboxInput("idx","Create Index",value = T)),
+    checkboxInput("idx","Create Index",value = T),
+    sliderInput("roll_window","Mov. Avg Window",
+                min = 5, max = 50, value = 10)),
   dashboardBody(
     tags$head(
       tags$link(rel = "stylesheet",

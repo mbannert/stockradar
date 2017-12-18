@@ -9,7 +9,7 @@ shinyServer(function(input,output){
                              end = input$end_date,
                              metric = input$metric)
     if(input$idx) smat <- create_index(smat)
-    smat
+    create_ma_comp(smat,input$roll_window)
   })
   
   output$stockchart <- renderDygraph({

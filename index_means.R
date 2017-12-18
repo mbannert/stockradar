@@ -1,40 +1,27 @@
 library(quantmod)
 
-m <- get_stock_matrix(c("TSLA","MSFT"))
+m <- get_stock_matrix(c("TSLA","MSFT","GOOG"))
 
-
-d <- as.data.frame(m)
-d$year <- format(as.Date(rownames(d)),"%Y")
-by_year <- split(d,f = d$year)
-l <- lapply(by_year, function(x) as.matrix(as.xts(x[,-3])))
-ll <- lapply(l,create_index)
-tt <- do.call("rbind",ll)
+head(m)
 
 
 
 
-d <- as.data.frame(tt)
-d$year <- format(as.Date(rownames(d)),"%Y")
-d$month <- as.numeric(format(as.Date(rownames(d)),"%m"))
-d$day <- as.numeric(format(as.Date(rownames(d)),"%d"))
-
-library(dplyr)
 
 dp <- as_data_frame(d)
-
 out <- dp %>% 
-  select(-TSLA.Close) %>% 
   group_by(month,day) %>% 
-  summarise(MSFT.mean = mean(MSFT.Close)) %>% 
-  arrange(month,day)
+  arrange(month,day) %>% 
+  summarise_if(is.numeric,mean) 
 
-plot(out$MSFT.mean,type="l")
-
-head(ll$`2015`)
-head(ll$`2016`)
-head(ll$`2017`)
+l <- lapply(out,function(x) na.omit(ma(x,30)))
+dygraph(do.call("cbind",l[-c(1:2)]))
 
 
+plot(l$TSLA.Close)
+lines(l$MSFT.Close,col="blue",lty="dashed")
+
+tstools::tsplot(l[-c(1:2)])
 
 
 
